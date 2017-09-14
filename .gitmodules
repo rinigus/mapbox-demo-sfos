@@ -1,0 +1,3 @@
+[submodule "mapbox-gl-qml"]
+	path = mapbox-gl-qml
+	url = https://github.com/rinigus/mapbox-gl-qml.git
