@@ -25,10 +25,13 @@ PkgConfigBR:
   - Qt5Core
   - Qt5Qml
   - Qt5Quick
+  - Qt5Location
+  - Qt5Positioning
 
 # Build dependencies without a pkgconfig setup can be listed here
 PkgBR:
   - opt-gcc6
+  - qmapboxgl
 
 # Runtime dependencies which are not automatically detected
 Requires:
