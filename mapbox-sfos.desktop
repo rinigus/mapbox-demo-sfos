@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-X-Nemo-Application-Type=no-invoker
+X-Nemo-Application-Type=generic
 Icon=mapbox-sfos
 Exec=mapbox-sfos
 Name=mapbox-sfos
