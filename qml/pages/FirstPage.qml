@@ -23,86 +23,136 @@ Page {
         minimumZoomLevel: 0
         maximumZoomLevel: 20
         pixelRatio: 3.0
-    }
 
-    //! Panning and pinch implementation on the maps
-    PinchArea {
-        id: pincharea
+        bearing: bearingSlider.value
+        pitch: pitchSlider.value
 
-        //! Holds previous zoom level value
-        property double __oldZoom
+        //accessToken: "INSERT_THE_TOKEN_OR_DEFINE_IN_ENVIRONMENT"
+        cacheDatabaseMaximalSize: 20*1024*1024
+        cacheDatabasePath: "/tmp/mbgl-cache.db"
 
-        anchors.fill: parent
+        //! Panning and pinch implementation on the maps
+        PinchArea {
+            id: pincharea
 
-        //! Calculate zoom level
-        function calcZoomDelta(zoom, percent) {
-            return zoom + Math.log(percent)/Math.log(2)
-        }
+            //! Holds previous zoom level value
+            property double __oldZoom
 
-        //! Save previous zoom level when pinch gesture started
-        onPinchStarted: {
-            console.log("Pinch started")
-            __oldZoom = map.zoomLevel
-        }
+            anchors.fill: parent
 
-        //! Update map's zoom level when pinch is updating
-        onPinchUpdated: {
-            console.log("Pinch updated")
-            map.zoomLevel = calcZoomDelta(__oldZoom, pinch.scale)
-        }
-
-        //! Update map's zoom level when pinch is finished
-        onPinchFinished: {
-            console.log("Pinch finished")
-            map.zoomLevel = calcZoomDelta(__oldZoom, pinch.scale)
-        }
-
-
-        //! Map's mouse area for implementation of panning in the map and zoom on double click
-        MouseArea {
-            id: mousearea
-
-            //! Property used to indicate if panning the map
-            property bool __isPanning: false
-
-            //! Last pressed X and Y position
-            property int __lastX: -1
-            property int __lastY: -1
-
-            anchors.fill : parent
-
-            //! When pressed, indicate that panning has been started and update saved X and Y values
-            onPressed: {
-                __isPanning = true
-                __lastX = mouse.x
-                __lastY = mouse.y
+            //! Calculate zoom level
+            function calcZoomDelta(zoom, percent) {
+                return zoom + Math.log(percent)/Math.log(2)
             }
 
-            //! When released, indicate that panning has finished
-            onReleased: {
-                __isPanning = false
+            //! Save previous zoom level when pinch gesture started
+            onPinchStarted: {
+                console.log("Pinch started")
+                __oldZoom = map.zoomLevel
             }
 
-            //! Move the map when panning
-            onPositionChanged: {
-                if (__isPanning) {
-                    var dx = mouse.x - __lastX
-                    var dy = mouse.y - __lastY
-                    map.pan(dx, dy)
+            //! Update map's zoom level when pinch is updating
+            onPinchUpdated: {
+                console.log("Pinch updated")
+                map.zoomLevel = calcZoomDelta(__oldZoom, pinch.scale)
+            }
+
+            //! Update map's zoom level when pinch is finished
+            onPinchFinished: {
+                console.log("Pinch finished")
+                map.zoomLevel = calcZoomDelta(__oldZoom, pinch.scale)
+            }
+
+
+            //! Map's mouse area for implementation of panning in the map and zoom on double click
+            MouseArea {
+                id: mousearea
+
+                //! Property used to indicate if panning the map
+                property bool __isPanning: false
+
+                //! Last pressed X and Y position
+                property int __lastX: -1
+                property int __lastY: -1
+
+                anchors.fill : parent
+
+                //! When pressed, indicate that panning has been started and update saved X and Y values
+                onPressed: {
+                    __isPanning = true
                     __lastX = mouse.x
                     __lastY = mouse.y
                 }
-            }
 
-            //! When canceled, indicate that panning has finished
-            onCanceled: {
-                __isPanning = false;
-            }
+                //! When released, indicate that panning has finished
+                onReleased: {
+                    __isPanning = false
+                }
 
-            //! Zoom one level when double clicked
-            onDoubleClicked: {
-                map.zoomLevel += 1
+                //! Move the map when panning
+                onPositionChanged: {
+                    if (__isPanning) {
+                        var dx = mouse.x - __lastX
+                        var dy = mouse.y - __lastY
+                        map.pan(dx, dy)
+                        __lastX = mouse.x
+                        __lastY = mouse.y
+                    }
+                }
+
+                //! When canceled, indicate that panning has finished
+                onCanceled: {
+                    __isPanning = false;
+                }
+
+                //! Zoom one level when double clicked
+                onDoubleClicked: {
+                    map.zoomLevel += 1
+                }
             }
+        }
+
+    }
+
+    Rectangle {
+        anchors.fill: menu
+        anchors.margins: -20
+        radius: 30
+        clip: true
+        color: "black"
+    }
+
+    Column {
+        id: menu
+
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.margins: 30
+
+        Label {
+            text: "Bearing"
+        }
+
+        Slider {
+            id: bearingSlider
+
+            width: page.width-100
+            maximumValue: 180
+            minimumValue: 0
+            value: 0
+        }
+
+        Label {
+            text: "Pitch"
+        }
+
+        Slider {
+            id: pitchSlider
+
+            width: page.width-100
+            maximumValue: 60
+            minimumValue: 0
+            value: 0
         }
     }
 }
