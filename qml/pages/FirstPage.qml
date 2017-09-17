@@ -47,20 +47,22 @@ Page {
 
             //! Save previous zoom level when pinch gesture started
             onPinchStarted: {
-                console.log("Pinch started")
+                //console.log("Pinch started")
                 __oldZoom = map.zoomLevel
             }
 
             //! Update map's zoom level when pinch is updating
             onPinchUpdated: {
-                console.log("Pinch updated")
-                map.zoomLevel = calcZoomDelta(__oldZoom, pinch.scale)
+                //console.log("Pinch updated: " + pinch.center)
+                //map.zoomLevel = calcZoomDelta(__oldZoom, pinch.scale)
+                map.setZoomLevel(calcZoomDelta(__oldZoom, pinch.scale), pinch.center)
             }
 
             //! Update map's zoom level when pinch is finished
             onPinchFinished: {
-                console.log("Pinch finished")
-                map.zoomLevel = calcZoomDelta(__oldZoom, pinch.scale)
+                //console.log("Pinch finished")
+                //map.zoomLevel = calcZoomDelta(__oldZoom, pinch.scale)
+                map.setZoomLevel(calcZoomDelta(__oldZoom, pinch.scale), pinch.center)
             }
 
 
