@@ -5,7 +5,7 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
-import QtPositioning 5.0
+import QtPositioning 5.2
 
 import QQuickItemMapboxGL 1.0
 
@@ -224,6 +224,43 @@ Page {
         map.setPaintProperty("route", "line-color", "blue");
         map.setPaintProperty("route", "line-width", 10.0);
         map.setPaintPropertyList("route", "line-dasharray", [1,2]);
+
+        /// Location support
+        map.addSource("location",
+                      {"type": "geojson",
+                          "data": {
+                              "type": "Feature",
+                              "properties": { "name": "location" },
+                              "geometry": {
+                                  "type": "Point",
+                                  "coordinates": [
+                                      (24.94),
+                                      (60.16)
+                                  ]
+                              }
+                          }
+                      })
+
+        map.addLayer("location-uncertainty", {"type": "circle", "source": "location"}, "waterway-label")
+        map.setPaintProperty("location-uncertainty", "circle-radius", 20)
+        map.setPaintProperty("location-uncertainty", "circle-color", "#87cefa")
+        map.setPaintProperty("location-uncertainty", "circle-opacity", 0.25)
+
+        map.addLayer("location-case", {"type": "circle", "source": "location"}, "waterway-label")
+        map.setPaintProperty("location-case", "circle-radius", 10)
+        map.setPaintProperty("location-case", "circle-color", "white")
+
+        map.addLayer("location", {"type": "circle", "source": "location"}, "waterway-label")
+        map.setPaintProperty("location", "circle-radius", 5)
+        map.setPaintProperty("location", "circle-color", "blue")
+
+        map.addLayer("location-label", {"type": "symbol", "source": "location"})
+        map.setLayoutProperty("location-label", "text-field", "{name}")
+        map.setLayoutProperty("location-label", "text-justify", "left")
+        map.setLayoutProperty("location-label", "text-anchor", "top-left")
+        map.setLayoutPropertyList("location-label", "text-offset", [0.2, 0.2])
+        map.setPaintProperty("location-label", "text-halo-color", "white")
+        map.setPaintProperty("location-label", "text-halo-width", 2)
     }
 
     Connections {
@@ -232,4 +269,45 @@ Page {
             console.log("Source: " + sourceID + " " + exists)
         }
     }
+
+    PositionSource {
+        id: gps
+
+        active: true
+        updateInterval: 1000
+
+        function update() {
+            if (gps.position.longitudeValid && gps.position.latitudeValid)
+            {
+                map.updateSource("location",
+                                 gps.position.coordinate.latitude,
+                                 gps.position.coordinate.longitude,
+                                 "accuracy: " + gps.position.horizontalAccuracy.toFixed(1) + " meters")
+                //map.center = gps.position.coordinate
+            }
+
+            if (gps.position.horizontalAccuracyValid)
+            {
+                map.setPaintProperty("location-uncertainty", "circle-radius", gps.position.horizontalAccuracy / map.metersPerPixel)
+            }
+
+            // if (gps.position.directionValid)
+            //     map.bearing = gps.position.direction
+        }
+
+
+        onPositionChanged: {
+            update()
+        }
+
+        Component.onCompleted: {
+            update()
+        }
+    }
+
+    Connections {
+        target: map
+        onMetersPerPixelChanged: gps.update()
+    }
+
 }
