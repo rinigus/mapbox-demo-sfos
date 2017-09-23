@@ -157,5 +157,79 @@ Page {
             value: 0
         }
     }
-}
 
+    Label {
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.margins: 10
+        color: "black"
+        text: "Scale: %0 m/pixel".arg(map.metersPerPixel.toFixed(2))
+    }
+
+    Component.onCompleted: {
+
+        var routeSource = {
+            "type": "geojson",
+            "data": '{
+                "type": "Feature",
+                "properties": {},
+                "geometry": {
+                    "type": "LineString",
+                    "coordinates": [
+                        [24.942046, 60.170448],
+                        [
+                            24.934420000000003,
+                            60.163500000000006
+                        ],
+                        [
+                            24.923490008921945,
+                            60.16159500239787
+                        ],
+                        [
+                            24.916150000000002,
+                            60.171530000000004
+                        ],
+                        [
+                            24.931620000000002,
+                            60.18218
+                        ],
+                        [
+                            24.961660000000002,
+                            60.17557000000001
+                        ],
+                        [
+                            24.954860000000004,
+                            60.158930000000005
+                        ],
+                        [
+                            24.943690000000004,
+                            60.155280000000005
+                        ]
+                    ]
+                }
+            }'
+        }
+
+        map.addSource("route", routeSource)
+
+        map.addLayer("routeCase", { "type": "line", "source": "route" }, "waterway-label")
+        map.setLayoutProperty("routeCase", "line-join", "round");
+        map.setLayoutProperty("routeCase", "line-cap", "round");
+        map.setPaintProperty("routeCase", "line-color", "white");
+        map.setPaintProperty("routeCase", "line-width", 15.0);
+
+        map.addLayer("route", { "type": "line", "source": "route" }, "waterway-label")
+        map.setLayoutProperty("route", "line-join", "round");
+        map.setLayoutProperty("route", "line-cap", "round");
+        map.setPaintProperty("route", "line-color", "blue");
+        map.setPaintProperty("route", "line-width", 10.0);
+        map.setPaintPropertyList("route", "line-dasharray", [1,2]);
+    }
+
+    Connections {
+        target: map
+        onReplySourceExists: {
+            console.log("Source: " + sourceID + " " + exists)
+        }
+    }
+}

@@ -67,8 +67,8 @@ rm -rf %{buildroot}
 mkdir -p %{buildroot}%{_datadir}/%{name}/lib
 
 cp /opt/gcc6/lib/libstdc++.so.6.0.22 %{buildroot}%{_datadir}/%{name}/lib/libstdc++.so.6
-cp /opt/gcc6/lib/libgcc_s.so.1 %{buildroot}%{_datadir}/%{name}/libgcc_s.so.1
-cp /opt/gcc6/lib/libgcc_s.so %{buildroot}%{_datadir}/%{name}/libgcc_s.so
+cp /opt/gcc6/lib/libgcc_s.so.1 %{buildroot}%{_datadir}/%{name}/lib/libgcc_s.so.1
+cp /opt/gcc6/lib/libgcc_s.so %{buildroot}%{_datadir}/%{name}/lib/libgcc_s.so
 # << install post
 
 desktop-file-install --delete-original       \
