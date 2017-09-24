@@ -274,16 +274,15 @@ Page {
         id: gps
 
         active: true
-        updateInterval: 1000
 
-        function update() {
+        function update_map() {
             if (gps.position.longitudeValid && gps.position.latitudeValid)
             {
-                map.updateSource("location",
-                                 gps.position.coordinate.latitude,
-                                 gps.position.coordinate.longitude,
-                                 "accuracy: " + gps.position.horizontalAccuracy.toFixed(1) + " meters")
-                //map.center = gps.position.coordinate
+                map.updateSourcePoint("location",
+                                      gps.position.coordinate.latitude,
+                                      gps.position.coordinate.longitude,
+                                      "accuracy: " + gps.position.horizontalAccuracy.toFixed(0) + " meters")
+                map.center = gps.position.coordinate
             }
 
             if (gps.position.horizontalAccuracyValid)
@@ -297,17 +296,17 @@ Page {
 
 
         onPositionChanged: {
-            update()
+            update_map()
         }
 
         Component.onCompleted: {
-            update()
+            update_map()
         }
     }
 
     Connections {
         target: map
-        onMetersPerPixelChanged: gps.update()
+        onMetersPerPixelChanged: gps.update_map()
     }
 
 }
