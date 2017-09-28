@@ -23,7 +23,7 @@ SOURCES += src/mapbox-sfos.cpp
 
 include(mapbox-gl-qml/mapbox-gl-qml.pri)
 
-LIBS += -lqmapboxgl -lz -L/opt/gcc6/lib
+LIBS += -lqmapboxgl -lz -L/opt/gcc6/lib -static-libstdc++
 
 OTHER_FILES += qml/mapbox-sfos.qml \
     qml/cover/CoverPage.qml \
