@@ -9,6 +9,8 @@ import QtPositioning 5.2
 
 import QQuickItemMapboxGL 1.0
 
+import "."
+
 Page {
     id: page
 
@@ -31,89 +33,7 @@ Page {
         cacheDatabaseMaximalSize: 20*1024*1024
         cacheDatabasePath: "/tmp/mbgl-cache.db"
 
-        //! Panning and pinch implementation on the maps
-        PinchArea {
-            id: pincharea
-
-            //! Holds previous zoom level value
-            property double __oldZoom
-
-            anchors.fill: parent
-
-            //! Calculate zoom level
-            function calcZoomDelta(zoom, percent) {
-                return zoom + Math.log(percent)/Math.log(2)
-            }
-
-            //! Save previous zoom level when pinch gesture started
-            onPinchStarted: {
-                //console.log("Pinch started")
-                __oldZoom = map.zoomLevel
-            }
-
-            //! Update map's zoom level when pinch is updating
-            onPinchUpdated: {
-                //console.log("Pinch updated: " + pinch.center)
-                //map.zoomLevel = calcZoomDelta(__oldZoom, pinch.scale)
-                map.setZoomLevel(calcZoomDelta(__oldZoom, pinch.scale), pinch.center)
-            }
-
-            //! Update map's zoom level when pinch is finished
-            onPinchFinished: {
-                //console.log("Pinch finished")
-                //map.zoomLevel = calcZoomDelta(__oldZoom, pinch.scale)
-                map.setZoomLevel(calcZoomDelta(__oldZoom, pinch.scale), pinch.center)
-            }
-
-
-            //! Map's mouse area for implementation of panning in the map and zoom on double click
-            MouseArea {
-                id: mousearea
-
-                //! Property used to indicate if panning the map
-                property bool __isPanning: false
-
-                //! Last pressed X and Y position
-                property int __lastX: -1
-                property int __lastY: -1
-
-                anchors.fill : parent
-
-                //! When pressed, indicate that panning has been started and update saved X and Y values
-                onPressed: {
-                    __isPanning = true
-                    __lastX = mouse.x
-                    __lastY = mouse.y
-                }
-
-                //! When released, indicate that panning has finished
-                onReleased: {
-                    __isPanning = false
-                }
-
-                //! Move the map when panning
-                onPositionChanged: {
-                    if (__isPanning) {
-                        var dx = mouse.x - __lastX
-                        var dy = mouse.y - __lastY
-                        map.pan(dx, dy)
-                        __lastX = mouse.x
-                        __lastY = mouse.y
-                    }
-                }
-
-                //! When canceled, indicate that panning has finished
-                onCanceled: {
-                    __isPanning = false;
-                }
-
-                //! Zoom one level when double clicked
-                onDoubleClicked: {
-                    map.zoomLevel += 1
-                }
-            }
-        }
-
+        MapMouseArea { map: map }
     }
 
     Rectangle {
@@ -282,7 +202,7 @@ Page {
                                       gps.position.coordinate.latitude,
                                       gps.position.coordinate.longitude,
                                       "accuracy: " + gps.position.horizontalAccuracy.toFixed(0) + " meters")
-                map.center = gps.position.coordinate
+                //map.center = gps.position.coordinate
             }
 
             if (gps.position.horizontalAccuracyValid)
