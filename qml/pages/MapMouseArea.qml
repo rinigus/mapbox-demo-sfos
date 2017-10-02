@@ -89,7 +89,10 @@ PinchArea {
 
         onClicked: !isPanning() && map.queryCoordinateForPixel(Qt.point(mouse.x, mouse.y), "mouse onClicked")
 
-        onDoubleClicked: !isPanning() && map.centerOnPosition();
+        onDoubleClicked: {
+            if (!isPanning())
+                map.center = gps.position.coordinate;
+        }
     }
 
     Connections {
