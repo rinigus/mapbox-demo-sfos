@@ -29,6 +29,7 @@ OTHER_FILES += qml/mapbox-sfos.qml \
     qml/cover/CoverPage.qml \
     qml/pages/FirstPage.qml \
     qml/pages/SecondPage.qml \
+    qml/pages/MapMouseArea.qml \
     rpm/mapbox-sfos.changes.in \
     rpm/mapbox-sfos.spec \
     rpm/mapbox-sfos.yaml \
