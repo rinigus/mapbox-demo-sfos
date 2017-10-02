@@ -100,17 +100,12 @@ PinchArea {
 
         onReplyCoordinateForPixel: {
             if (tag === "mouse onPressAndHold") {
-                map.addPois([{
-                                 "x": geocoordinate.longitude,
-                                 "y": geocoordinate.latitude,
-                                 "title": app.tr("Unnamed point"),
-                                 "text": app.tr("Unnamed point")
-                             }]);
+                console.log("Mouse pressed & hold at " + geocoordinate)
                 return;
             }
 
             if (tag === "mouse onClicked") {
-                map.mouseClick(geocoordinate, degLatPerPixel, degLonPerPixel)
+                console.log("Mouse clicked at " + geocoordinate + " precision: " +  degLatPerPixel + " " + degLonPerPixel)
                 return;
             }
         }
