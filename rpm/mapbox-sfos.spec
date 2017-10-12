@@ -7,7 +7,7 @@ Name:       mapbox-sfos
 
 # >> macros
 %define __provides_exclude_from ^%{_datadir}/.*$
-#%define __requires_exclude ^libstdc.*$
+%define __requires_exclude ^libstdc.*$
 # << macros
 
 %{!?qtc_qmake:%define qtc_qmake %qmake}
@@ -66,9 +66,9 @@ rm -rf %{buildroot}
 # ship all shared libraries not allowed in Harbour with the app
 mkdir -p %{buildroot}%{_datadir}/%{name}/lib
 
-#cp /opt/gcc6/lib/libstdc++.so.6.0.22 %{buildroot}%{_datadir}/%{name}/lib/libstdc++.so.6
-#cp /opt/gcc6/lib/libgcc_s.so.1 %{buildroot}%{_datadir}/%{name}/lib/libgcc_s.so.1
-#cp /opt/gcc6/lib/libgcc_s.so %{buildroot}%{_datadir}/%{name}/lib/libgcc_s.so
+cp /opt/gcc6/lib/libstdc++.so.6.0.22 %{buildroot}%{_datadir}/%{name}/lib/libstdc++.so.6
+cp /opt/gcc6/lib/libgcc_s.so.1 %{buildroot}%{_datadir}/%{name}/lib/libgcc_s.so.1
+cp /opt/gcc6/lib/libgcc_s.so %{buildroot}%{_datadir}/%{name}/lib/libgcc_s.so
 # << install post
 
 desktop-file-install --delete-original       \
