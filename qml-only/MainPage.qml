@@ -21,64 +21,7 @@ Page
         cacheDatabaseMaximalSize: 20*1024*1024
         cacheDatabasePath: "/tmp/mbgl-cache.db"
 
-        styleJson: '{
-            "version": 8,
-            "name": "Empty",
-            "sources": {
-                "mapbox://mapbox.mapbox-streets-v6": {
-                    "url": "mapbox://mapbox.mapbox-streets-v6",
-                    "type": "vector"
-                }
-            },
-            "sprite": "mapbox://sprites/tmpsantos/35fb3795",
-            "glyphs": "mapbox://fonts/tmpsantos/{fontstack}/{range}.pbf",
-            "layers": [
-                {
-                    "id": "background",
-                    "type": "background",
-                    "metadata": {},
-                    "minzoom": 0,
-                    "maxzoom": 22,
-                    "layout": {
-                        "visibility": "visible"
-                    },
-                    "paint": {
-                        "background-color": "rgba(143,39,39,1)"
-                    },
-                    "interactive": true
-                },
-                {
-                    "id": "admin",
-                    "type": "line",
-                    "metadata": {},
-                    "source": "mapbox://mapbox.mapbox-streets-v6",
-                    "source-layer": "admin",
-                    "minzoom": 0,
-                    "maxzoom": 22,
-                    "filter": [
-                        "in",
-                        "$type",
-                        "LineString",
-                        "Polygon",
-                        "Point"
-                    ],
-                    "layout": {
-                        "visibility": "visible"
-                    },
-                    "paint": {
-                        "line-color": "rgba(235,204,204,1)",
-                        "line-width": 1
-                    },
-                    "interactive": true
-                }
-            ],
-            "draft": false,
-            "id": "35fb3795",
-            "modified": "2015-09-04T06:15:21.245Z",
-            "owner": "tmpsantos",
-            "visibility": "private",
-            "created": "2015-09-03T07:50:56.403Z"
-        }'
+        styleUrl: "mapbox://styles/mapbox/outdoors-v10"
 
         MapboxMapGestureArea {
             map: map
